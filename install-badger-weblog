@@ -20,7 +20,7 @@ mkfifo /var/log/nginx/access.log
 rm -f /var/log/apache2/access.log
 mkfifo /var/log/apache2/access.log
 
-chmod +x badger-chainz
+chmod +x badger-weblog
 cp badger-weblog /usr/local/sbin/badger-chainz
 
 mkdir -p /opt/badger-chainz/workspace/
