@@ -4,5 +4,5 @@ if pgrep -x "sec" >/dev/null
 then
         exit 0
 else
-        sec -input /var/log/httpd/access.log -input /var/log/nginx/access.log -input /var/log/apache2/access.log /var/log/access.log -conf /opt/badger-chainz/etc/weblog.cfg -detach
+        sec -input /var/log/httpd/access.log -input /var/log/nginx/access.log -input /var/log/apache2/access.log -input /var/log/access.log -conf /opt/badger-chainz/etc/weblog.cfg -detach
 fi
