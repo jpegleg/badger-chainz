@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Requirements that this installer will not install by design
+which sec || exit 1
+which openssl || exit 1
+
+echo "This install script removes log files: /var/log/httpd/access.log /var/log/nginx/access.log /var/log/apache2/access.log"
+echo "and replaces them with named pipes of the same path and name, with mkfifo."
+echo
+echo "Stop your web services then press any key, or control +c to abort install script."
+read resume
+
+rm -f /var/log/httpd/access.log
+mkfifo /var/log/httpd/access.log
+
+rm -f /var/log/nginx/access.log
+mkfifo /var/log/nginx/access.log
+
+rm -f /var/log/apache2/access.log
+mkfifo /var/log/apache2/access.log
+
+chmod +x badger-chainz
+cp badger-chainz /usr/local/sbin/
+
+mkdir -p /opt/badger-chainz/workspace/
+mkdir -p /opt/badger-chainz/etc/
+cp chainz.cfg /opt/badger-chainz/etc/
+
+# more to come here...
