@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+transaction () {
+  stamp=$(date +%Y%m%d%H%M%S%N)
+  echo $DATASEGMENT | gpg --cipher=aes256 --always-trust --batch --armor -r PGPEMAIL --yes -e >> badger-weblog_access.log.$stamp.enc
+}
+
+main () {
+  transaction || logger "badger-weblog error return code $? - exit on transaction function..."
+}
+
+cd /opt/badger-chainz/workspace/
+
+while read uinput; do
+ export DATASEGMENT=$uinput
+done<&0
+
+main $DATASEGMENT || logger "badger-weblog error return code $? - exit on main function..."
