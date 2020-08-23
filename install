@@ -7,7 +7,7 @@ which openssl || exit 1
 echo "This install script removes log files: /var/log/httpd/access.log /var/log/nginx/access.log /var/log/apache2/access.log"
 echo "and replaces them with named pipes of the same path and name, with mkfifo."
 echo
-echo "Stop your web services then the return key, or control+c to abort install script."
+echo "Stop your web services then press the return key, or control+c to abort install script."
 read resume
 
 rm -f /var/log/httpd/access.log
@@ -25,5 +25,11 @@ cp badger-chainz /usr/local/sbin/
 mkdir -p /opt/badger-chainz/workspace/
 mkdir -p /opt/badger-chainz/etc/
 cp chainz.cfg /opt/badger-chainz/etc/
+
+cd /opt/badger-chainz/
+openssl genrsa 4096 > secret-rsa.pem
+openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+cp secp384r1.pem chain.key
 
 # more to come here...
