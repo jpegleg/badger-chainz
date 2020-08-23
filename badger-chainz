@@ -29,6 +29,8 @@ main () {
   echo >> blch.history
 }
 
+cd /opt/badger-chainz/workspace/
+
 while read uinput; do
  export DATASEGMENT=$uinput
 done<&0
