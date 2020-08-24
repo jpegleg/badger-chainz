@@ -3,7 +3,7 @@
 See https://simple-evcorr.github.io/
 
 
-replace access.log with a FIFO (named pipe of the same name), read the data off the FIFO, encrypt then signed transaction chain.
+replace access.log with a FIFO (named pipe of the same name), read the data off the FIFO with SEC, encrypt then signed transaction chain.
 
 Important note about default badger-chainz and alternate configurations:
 
@@ -22,3 +22,11 @@ This mode is badger-weblog and it has a separate installer install-badger-weblog
 the blockchain, but uses the FIFO for the access.log and just writes all of the log data encrypted to badger-weblog_access.log.$stamp.enc
 
 The install scripts do not expect you to use badger-chainz blockchain AND badger-weblog, one or the other. You can modify the scripts to run both if you really want to, but the design is to use badger-chainz-secret-mode if you want both together.
+
+And if you just don't want to have logs stored and want to be able to leverage the FIFO
+
+rm -f /var/log/nginx/access.log && mkfifo /var/log/nginx/access.log
+rm -f /var/log/httpd/access.log && mkfifo /var/log/httpd/access.log
+rm -f /var/log/apache2/access.log && mkfifo /var/log/apache2/access.log
+
+You might just do that to create privacy for your users and not store any log files. Then if you need to debug, you can attach a SEC process or simply cat the FIFO.
