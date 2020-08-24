@@ -30,3 +30,9 @@ rm -f /var/log/httpd/access.log && mkfifo /var/log/httpd/access.log
 rm -f /var/log/apache2/access.log && mkfifo /var/log/apache2/access.log
 
 You might just do that to create privacy for your users and not store any log files. Then if you need to debug, you can attach a SEC process or simply cat the FIFO.
+
+
+WARNING: apache2 gets upset about the fifo in some situations and will fail to start! Removing the fifo during restart is one solution:
+
+rm -f /var/log/apache2/access.log && systemctl restart apache2 && rm -f /var/log/apache2/access.log && mkfifo /var/log/apache2/access.log
+
