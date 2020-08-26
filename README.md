@@ -2,8 +2,10 @@
 
 See https://simple-evcorr.github.io/
 
+WARNING: some web server configurations will fail to restart the web server if the FIFO is in place
 
-read the data off access logs with SEC, process custom rules for API calls, encrypted then signed transaction chain, truncate the access logs.
+
+replace access.log with a FIFO (named pipe of the same name), read the data off the FIFO, encrypt then signed transaction chain.
 
 Important note about default badger-chainz and alternate configurations:
 
@@ -13,13 +15,13 @@ If you need to add data storage secrecy, edit then deploy the badger-chainz-secr
 The edit is to ensure the email address or identifier for the gpg public key is set in the script where the template has "PGPEMAIL".
 You will need to have a gpg/pgp public key imported into the user's keyring, and not have that private key anywhere on the server.
 This will mean that the admin will have to pull the encrypted chain down to his decryption device that has the gpg private key to decrypt
-the chain and do anything with it. Use this if top security is needed and when possible. 
+the chain and do anything with it. Use this if top security is needed and when possible.
 
 Not using secret mode does not make it insecure, but certainly the default is more focused on identity, granularity, validation, and usability.
 
 The third mode is not actually badger-chainz, but should be used if you don't need to create the transaction chain and you just need to encrypt the data.
 This mode is badger-weblog and it has a separate installer install-badger-weblog. The badger-weblog setup doesn't separate or validate anything, doesn't create
-the blockchain, but truncates the access.log and just writes all of the log data encrypted to badger-weblog_access.log.$stamp.enc
+the blockchain, but uses the FIFO for the access.log and just writes all of the log data encrypted to badger-weblog_access.log.$stamp.enc
 
 The install scripts do not expect you to use badger-chainz blockchain AND badger-weblog, one or the other. You can modify the scripts to run both if you really want to, but the design is to use badger-chainz-secret-mode if you want both together.
 
