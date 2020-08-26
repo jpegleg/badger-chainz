@@ -3,7 +3,7 @@
 See https://simple-evcorr.github.io/
 
 
-read the data off access logs with SEC, process custom rules for API calls, truncate the access logs, encrypted then signed transaction chain.
+read the data off access logs with SEC, process custom rules for API calls, encrypted then signed transaction chain, truncate the access logs.
 
 Important note about default badger-chainz and alternate configurations:
 
