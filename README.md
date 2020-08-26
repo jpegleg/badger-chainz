@@ -4,6 +4,7 @@ See https://simple-evcorr.github.io/
 
 WARNING: some web server configurations will fail to restart the web server if the FIFO is in place
 
+I have got FIFO access.log working so far with Debian and NGINX. I have seen many default configurations for httpd and apache2 fail to restart the web service when the FIFO is in place.
 
 replace access.log with a FIFO (named pipe of the same name), read the data off the FIFO, encrypt then signed transaction chain.
 
