@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+cp /dev/null /var/log/access.log &
+cp /dev/null /var/log/httpd/access_log &
+cp /dev/null /var/log/nginx/access.log &
+cp /dev/null /var/log/apache2/access.log &
