@@ -5,10 +5,8 @@ which sec || exit 1
 which openssl || exit 1
 which gpg || exit 1
 
-echo "This install script removes log files: /var/log/httpd/access.log /var/log/nginx/access.log /var/log/apache2/access.log"
-echo "and replaces them with named pipes of the same path and name, with mkfifo."
 echo
-echo "Stop your web services then press the return key, or control+c to abort install script."
+echo "Press the return key to install, or control+c to abort install script."
 read resume
 
 rm -f /var/log/httpd/access.log
