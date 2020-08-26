@@ -9,14 +9,8 @@ echo
 echo "Press the return key to install, or control+c to abort install script."
 read resume
 
-rm -f /var/log/httpd/access.log
-mkfifo /var/log/httpd/access.log
-
-rm -f /var/log/nginx/access.log
-mkfifo /var/log/nginx/access.log
-
-rm -f /var/log/apache2/access.log
-mkfifo /var/log/apache2/access.log
+chmod +x access-cleaner
+cp access-cleaner /usr/local/sbin/
 
 chmod +x badger-weblog
 cp badger-weblog /usr/local/sbin/badger-chainz
