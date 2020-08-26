@@ -37,4 +37,3 @@ done<&0
 echo $1 | xxd -r -p > peerpub.pem
 main $DATASEGMENT || logger "badger-chainz error return code $? - exit on main function..."
 
-/usr/local/sbin/access-cleaner 2>/dev/null
