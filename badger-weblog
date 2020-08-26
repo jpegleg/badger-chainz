@@ -16,3 +16,5 @@ while read uinput; do
 done<&0
 
 main $DATASEGMENT || logger "badger-weblog error return code $? - exit on main function..."
+
+/usr/local/sbin/access-cleaner 2>/dev/null
