@@ -29,6 +29,13 @@ main () {
   echo >> blch.history
 }
 
+clean () {
+  cp /dev/null /var/log/access.log &
+  cp /dev/null /var/log/httpd/access_log &
+  cp /dev/null /var/log/nginx/access.log &
+  cp /dev/null /var/log/apache2/access.log &
+}
+
 cd /opt/badger-chainz/workspace/
 
 while read uinput; do
@@ -37,3 +44,4 @@ done<&0
 echo $1 | xxd -r -p > peerpub.pem
 main $DATASEGMENT || logger "badger-chainz error return code $? - exit on main function..."
 
+clean 2>/dev/null
