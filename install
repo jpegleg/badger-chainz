@@ -8,8 +8,8 @@
     echo "$(hostname)"
     echo "$(sha256sum badger-chainz)" | logger
     echo "$(sha256sum badger-chainz)"
-    echo "$(sha256sum badger-weblog.cfg)" | logger
-    echo "$(sha256sum badger-weblog.cfg)"
+    echo "$(sha256sum chainz.cfg)" | logger
+    echo "$(sha256sum chainz.cfg)"
     echo
 
 # Requirements that this installer will not install by design
