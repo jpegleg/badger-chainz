@@ -1,37 +1,134 @@
 #!/usr/bin/env bash
 
+    echo
+    echo -e "\e[1;32m B A D G E R - C H A I N Z \e[39m installer\e[0m"
+    echo
+
+    echo "Installation $(date)" 
+    echo "$(hostname)"
+    echo "$(sha256sum badger-chainz)" | logger
+    echo "$(sha256sum badger-chainz)"
+    echo "$(sha256sum weblog.cfg)" | logger
+    echo "$(sha256sum weblog.cfg)"
+    echo
+
 # Requirements that this installer will not install by design
-which sec || exit 1
-which openssl || exit 1
+sha256sum $(which sec) || exit 1
+sha256sum $(which sec) | logger
+sha256sum $(which openssl) || exit 1
+sha256sum $(which openssl) | logger 
+sha256sum $(which gpg) || exit 1
+sha256sum $(which gpg) | logger
 
 echo
 echo "Press the return key to install, or control+c to abort install script."
 read resume
 
+  echo "badger-chainz installing..." | logger
+    echo "badger-chainz installing..." 
+    echo "    chmod +x badger-chainz" | logger
+    echo "    chmod +x badger-chainz" 
+
 chmod +x badger-chainz
 cp badger-chainz /usr/local/sbin/
 
-# I have gotten NGINX to work with the FIFO, but not in all situations!
-rm -f /var/log/nginx/access.log
-mkfifo /var/log/nginx/access.log
-chown www-data:root /var/log/nginx/access.log # found this helped here
+# If NGINX ( so far best at handling the FIFO but not without issue )
 
-# tests are failing for restarting httpd with FIFO in place! Account for that, yikes!
-rm -f /var/log/httpd/access._log
+if [ -d /var/log/nginx ]; then
+    echo "executing..." | logger
+    echo "executing..."
+    echo "    rm -f /var/log/nginx/access.log" | logger
+    echo "    rm -f /var/log/nginx/access.log" 
+
+rm -f /var/log/nginx/access.log
+
+    echo "    mkfifo /var/log/nginx/access.log" | logger
+    echo "    mkfifo /var/log/nginx/access.log"
+
+mkfifo /var/log/nginx/access.log 
+
+    echo "    chown www-data:root /var/log/nginx/access.log" | logger
+    echo "    chown www-data:root /var/log/nginx/access.log"
+
+chown www-data:root /var/log/nginx/access.log
+
+fi
+
+# httpd block, currently failing in tests
+
+if [ -d /var/log/httpd/ ]; then
+    echo "executing..." | logger
+    echo "executing..."
+    echo "    rm -f /var/log/httpd/access_log" | logger
+    echo "    rm -f /var/log/httpd/access_log"
+    
+rm -f /var/log/httpd/access_log
+
+    echo "    mkfifo /var/log/httpd/access_log" | logger
+    echo "    mkfifo /var/log/httpd/access_log"
+
 mkfifo /var/log/httpd/access_log
 
-# tests are failing for restarting apache2 with FIFO in place! Account for that, yikes!
-rm -f /var/log/apache2/access._log
-mkfifo /var/log/apache2/access_log
+fi
+
+# apache2 block, currently failing in tests
+
+if [ -d /var/log/apache2/ ]; then
+    echo "executing..." | logger
+    echo "executing..."
+    echo "    rm -f /var/log/apache2/access.log" | logger
+    echo "    rm -f /var/log/apache2/access.log"
+
+rm -f /var/log/apache2/access.log
+
+    echo "    mkfifo /var/log/apache2/access.log" | logger
+    echo "    mkfifo /var/log/apache2/access.log"
+
+mkfifo /var/log/apache2/access.log
+
+fi
 
 mkdir -p /opt/badger-chainz/workspace/
-mkdir -p /opt/badger-chainz/etc/
-cp chainz.cfg /opt/badger-chainz/etc/
+
+    echo "    mkdir -p /opt/badger-chainz/etc/" | logger
+    echo "    mkdir -p /opt/badger-chainz/etc/"
+
+mkdir -p /opt/badger-chainz/etc/ 
+
+    echo "    cp chainz.cfg /opt/badger-chainz/etc/" | logger
+    echo "    cp chainz.cfg /opt/badger-chainz/etc/"
+
+cp chainz.cfg /opt/badger-chainz/etc/ || exit 1
+
+    echo
+    echo -e "\e[1;36m    entering /opt/badger-chainz/workspace/" | logger
+    echo -e "\e[1;36m    entering /opt/badger-chainz/workspace/"
 
 cd /opt/badger-chainz/
+
+    echo
+    echo -e "\e[1;36m    generating RSA signing private key: secret-rsa.pem" | logger
+
 openssl genrsa 4096 > secret-rsa.pem
+    
+    echo
+    echo -e "\e[1;36m    generating secp384r1 curve private key: secp384r1.pem"
+
 openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+
+    echo
+    echo -e "\e[1;36m    extracting secp384r1 public key : secp384r1.pub"
+
 openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+
+    echo
+    echo -e "\e[1;36m    setting secp384r1.pem as the chain.key: cp secp384r1.pem chain.key"
+
 cp secp384r1.pem chain.key
 
 # more to come here...
+
+#
+    echo
+    echo -e "\e[1;32m Install complete!\e[0m"
+    echo
