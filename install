@@ -20,11 +20,12 @@ sha256sum $(which openssl) | logger
 sha256sum $(which gpg) || exit 1
 sha256sum $(which gpg) | logger
 
-echo
-echo "Press the return key to install, or control+c to abort install script."
+    echo
+    echo "Press the return key to install, or control+c to abort install script."
+
 read resume
 
-  echo "badger-chainz installing..." | logger
+    echo "badger-chainz installing..." | logger
     echo "badger-chainz installing..." 
     echo "    chmod +x badger-chainz" | logger
     echo "    chmod +x badger-chainz" 
