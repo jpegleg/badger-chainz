@@ -8,8 +8,8 @@
     echo "$(hostname)"
     echo "$(sha256sum badger-weblog)" | logger
     echo "$(sha256sum badger-weblog)"
-    echo "$(sha256sum weblog.cfg)" | logger
-    echo "$(sha256sum weblog.cfg)"
+    echo "$(sha256sum badger-weblog.cfg)" | logger
+    echo "$(sha256sum badger-weblog.cfg)"
     echo
 
 # Requirements that this installer will not install by design
@@ -121,7 +121,7 @@ mkdir -p /opt/badger-chainz/etc/
     echo "    cp weblog.cfg /opt/badger-chainz/etc/" | logger
     echo "    cp weblog.cfg /opt/badger-chainz/etc/"
 
-cp weblog.cfg /opt/badger-chainz/etc/ || exit 1
+cp badger-weblog.cfg /opt/badger-chainz/etc/ || exit 1
 
     echo
     echo -e "\e[1;36m    entering /opt/badger-chainz/workspace/" | logger
