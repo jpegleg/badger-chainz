@@ -24,7 +24,7 @@ main () {
   transaction || logger "badger-chainz error return code $? - exit on transaction function..."
   act=TEMPLATEINSTANCENAME
   openssl rsautl -verify -in TEMPLATEINSTANCENAME.sig -inkey TEMPLATEINSTANCENAME.rsa.pub -pubin | openssl enc -pbkdf2 -aes256 -base64 -k $(base64 secret.bin) >> blch.chain || exit 1
-  echo "$(date +%Y%m%d%H%M%S%N), $act, $(cat peerpub.pem | xxd -p), $seed, $(sha512sum secret.bin | cut -d' ' -f1), $(md5sum chain.key | cut -d' ' -f1), $(md5sum secret-rsa.pem | cut -d' ' -f1)" | tr -d '\n' >> blch.chain
+  echo "$(date +%Y%m%d%H%M%S%N), $act, $(cat peerpub.pem | xxd -p | tr -d '\n'), $seed, $(sha512sum secret.bin | cut -d' ' -f1), $(md5sum chain.key | cut -d' ' -f1), $(md5sum secret-rsa.pem | cut -d' ' -f1)" | tr -d '\n' >> blch.chain
   echo >> blch.chain
   sha1sum blch.chain | cut -d' ' -f1 > blch.chain.sha1
   openssl rsautl -sign -in blch.chain.sha1 -inkey secret-rsa.pem -out blch.sign
