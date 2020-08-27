@@ -1,37 +1,119 @@
 #!/usr/bin/env bash
 
+    echo
+    echo -e "\e[1;32m B A D G E R - C H A I N Z \e[39mweblog mode installer\e[0m"
+    echo
+
+    echo "Installation $(date)" 
+    echo "$(hostname)"
+    echo "$(sha256sum badger-weblog)" | logger
+    echo "$(sha256sum badger-weblog)"
+    echo "$(sha256sum weblog.cfg)" | logger
+    echo "$(sha256sum weblog.cfg)"
+    echo
+
 # Requirements that this installer will not install by design
-which sec || exit 1
-which openssl || exit 1
-which gpg || exit 1
+sha256sum $(which sec) || exit 1
+sha256sum $(which sec) | logger
+sha256sum $(which openssl) || exit 1
+sha256sum $(which openssl) | logger 
+sha256sum $(which gpg) || exit 1
+sha256sum $(which gpg) | logger
 
 echo
 echo "Press the return key to install, or control+c to abort install script."
 read resume
 
+if [ -d /var/log/nginx ]; then
+    echo "executing..." | logger
+    echo "executing..."
+    echo "    rm -f /var/log/nginx/access.log" | logger
+    echo "    rm -f /var/log/nginx/access.log" 
 
-# I have gotten NGINX to work with the FIFO, but not in all situations!
 rm -f /var/log/nginx/access.log
-mkfifo /var/log/nginx/access.log
+
+    echo "    mkfifo /var/log/nginx/access.log" | logger
+    echo "    mkfifo /var/log/nginx/access.log"
+
+mkfifo /var/log/nginx/access.log 
+
+    echo "    chown www-data:root /var/log/nginx/access.log" | logger
+    echo "    chown www-data:root /var/log/nginx/access.log"
+
 chown www-data:root /var/log/nginx/access.log
 
-# tests are failing for restarting httpd with FIFO in place! Account for that, yikes! WIP
+fi
+
+
+if [ -d /var/log/httpd/ ]; then
+    echo "executing..." | logger
+    echo "executing..."
+    echo "    rm -f /var/log/httpd/access_log" | logger
+    echo "    rm -f /var/log/httpd/access_log"
+    
 rm -f /var/log/httpd/access_log
+
+    echo "    mkfifo /var/log/httpd/access_log" | logger
+    echo "    mkfifo /var/log/httpd/access_log"
+
 mkfifo /var/log/httpd/access_log
 
-# tests are failing for restarting apache2 with FIFO in place! Account for that, yikes!
+fi
+
+if [ -d /var/log/apache2/ ]; then
+    echo "executing..." | logger
+    echo "executing..."
+    echo "    rm -f /var/log/apache2/access.log" | logger
+    echo "    rm -f /var/log/apache2/access.log"
+
 rm -f /var/log/apache2/access.log
+
+    echo "    mkfifo /var/log/apache2/access.log" | logger
+    echo "    mkfifo /var/log/apache2/access.log"
+
 mkfifo /var/log/apache2/access.log
 
+fi
 
-chmod +x badger-weblog
-cp badger-weblog /usr/local/sbin/badger-chainz
+    echo "badger-weblog installing..." | logger
+    echo "badger-weblog installing..." 
+    echo "    chmod +x badger-weblog" | logger
+    echo "    chmod +x badger-weblog" 
+
+chmod +x badger-weblog || exit 1
+
+    echo "    cp badger-weblog /usr/local/sbin/badger-chainz" | logger
+    echo "    cp badger-weblog /usr/local/sbin/badger-chainz"
+
+cp badger-weblog /usr/local/sbin/badger-chainz || exit 1
+
+    echo "    mkdir -p /opt/badger-chainz/workspace/" | logger
+    echo "    mkdir -p /opt/badger-chainz/workspace/"
 
 mkdir -p /opt/badger-chainz/workspace/
-mkdir -p /opt/badger-chainz/etc/
-cp weblog.cfg /opt/badger-chainz/etc/
 
-cd /opt/badger-chainz/
+    echo "    mkdir -p /opt/badger-chainz/etc/" | logger
+    echo "    mkdir -p /opt/badger-chainz/etc/"
+
+mkdir -p /opt/badger-chainz/etc/ 
+
+    echo "    cp weblog.cfg /opt/badger-chainz/etc/" | logger
+    echo "    cp weblog.cfg /opt/badger-chainz/etc/"
+
+cp weblog.cfg /opt/badger-chainz/etc/ || exit 1
+
+    echo
+    echo -e "\e[1;36m    entering /opt/badger-chainz/workspace/" | logger
+    echo -e "\e[1;36m    entering /opt/badger-chainz/workspace/"
+
+cd /opt/badger-chainz/workspace/
 
 
 # more to come here...
+
+
+#
+
+    echo
+    echo -e "\e[1;32m Install complete!\e[0m"
+    echo
