@@ -24,6 +24,8 @@ echo
 echo "Press the return key to install, or control+c to abort install script."
 read resume
 
+# If NGINX ( so far best at handling the FIFO but not without issue )
+
 if [ -d /var/log/nginx ]; then
     echo "executing..." | logger
     echo "executing..."
@@ -44,6 +46,7 @@ chown www-data:root /var/log/nginx/access.log
 
 fi
 
+# httpd block, currently failing in tests
 
 if [ -d /var/log/httpd/ ]; then
     echo "executing..." | logger
@@ -59,6 +62,8 @@ rm -f /var/log/httpd/access_log
 mkfifo /var/log/httpd/access_log
 
 fi
+
+# apache2 block, currently failing in tests
 
 if [ -d /var/log/apache2/ ]; then
     echo "executing..." | logger
