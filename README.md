@@ -4,7 +4,7 @@ See https://simple-evcorr.github.io/
 
 WARNING: some web server configurations will fail to restart the web server if the FIFO is in place
 If your configuration breaks after setup during a web server (httpd, apache2, nginx) restart, then you will either need to fix that (permssions? etc) or switch
-it up and actually write a log file: edit the scripts to not rm the log and mkfifo it. Doing this work around is not acceptible for some cases when you don't want to write the access data to the disk ever, but in the case where that is permited, an alternative is to have a rule or function at the end of the rule chain that truncates the log file. This work around does have some risks for data loss if very close rapid valid requests come through, so throttling the truncate could be helpful potentially.
+it up and actually write a log file: edit the scripts to not rm the log and mkfifo it. Doing this work around is not acceptible for some cases when you don't want to write the access data to the disk ever, but in the case where that is permited, an alternative is to have a rule or function at the end of the rule chain that truncates the log file. This work around does have some risks for data loss if very close rapid valid requests come through, so throttling the truncate could be helpful potentially, and this is the same reason that the badger-chainz customer rule template has window=1 which limits to max triggers to 1 per second.
 
 I have got FIFO access.log working so far with Debian and NGINX. I have seen many default configurations for httpd and apache2 fail to restart the web service when the FIFO is in place.
 
