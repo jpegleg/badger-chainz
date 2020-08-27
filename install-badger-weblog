@@ -13,15 +13,15 @@ read resume
 # I have gotten NGINX to work with the FIFO, but not in all situations!
 rm -f /var/log/nginx/access.log
 mkfifo /var/log/nginx/access.log
-chown www-data:root /var/log/nginx/access.log # found this helped here
+chown www-data:root /var/log/nginx/access.log
 
-# tests are failing for restarting httpd with FIFO in place! Account for that, yikes!
-rm -f /var/log/httpd/access._log
+# tests are failing for restarting httpd with FIFO in place! Account for that, yikes! WIP
+rm -f /var/log/httpd/access_log
 mkfifo /var/log/httpd/access_log
 
 # tests are failing for restarting apache2 with FIFO in place! Account for that, yikes!
-rm -f /var/log/apache2/access._log
-mkfifo /var/log/apache2/access_log
+rm -f /var/log/apache2/access.log
+mkfifo /var/log/apache2/access.log
 
 
 chmod +x badger-weblog
