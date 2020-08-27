@@ -20,8 +20,9 @@ sha256sum $(which openssl) | logger
 sha256sum $(which gpg) || exit 1
 sha256sum $(which gpg) | logger
 
-echo
-echo "Press the return key to install, or control+c to abort install script."
+    echo
+    echo "Press the return key to install, or control+c to abort install script."
+
 read resume
 
 # If NGINX ( so far best at handling the FIFO but not without issue )
