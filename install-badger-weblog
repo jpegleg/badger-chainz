@@ -9,9 +9,6 @@ echo
 echo "Press the return key to install, or control+c to abort install script."
 read resume
 
-chmod +x access-cleaner
-cp access-cleaner /usr/local/sbin/
-
 chmod +x badger-weblog
 cp badger-weblog /usr/local/sbin/badger-chainz
 
