@@ -2,19 +2,12 @@
 
 See https://simple-evcorr.github.io/
 
-#.............................................!!!!!!................................................#
-
-WARNING: some web server configurations will fail to restart the web server if the FIFO is in place.
-
-If your configuration breaks after setup during a web server (httpd, apache2, nginx) restart, then you will either need to fix that (permssions? etc) or switch
-it up and actually write a log file: edit the scripts to not rm the log and mkfifo it. Doing this work around is not acceptible for some cases when you don't want to write the access data to the disk ever, but in the case where that is permited, an alternative is to have a rule or function at the end of the rule chain that truncates the log file. This work around does have some risks for data loss if very close rapid valid requests come through, so throttling the truncate could be helpful potentially, and this is the same reason that the badger-chainz customer rule template has window=1 which limits to max triggers to 1 per second. If you want to scale out to go beyond 1/tps badger-chainz, I recommend ordered load balancing so that the chains can be reassembled/inserted by another service such as using haproxy leastconn algorithm "balance leastconn" in the haproxy config and each chain server in that pool. Then the scaled out collection service (not included here) reads off the chains themselves and not the private keys, and then encrypts them again if needed, and inserts them into, say distributed cloud databases. Your data scientists may get upset when they query and all of the actual data is encrypted but so will the hackers, and this is how we granularly control access to sensitive data that is replicated to many unknown disks in the cloud etc. This tool isn't really meant to scale much beyond that, and would be rewritten in rust etc to be actually good. This is more of a in-some-cases-functional prototype to template the implementation of a strict and complex data lifecycle. Anyone or any software that wants to actually use the data will have to have access to keys, and in some cases layers of shared and secret keys, to use the data at all.
-
-#.............................................!!!!!!................................................#
-
-
-I have got FIFO access.log working so far with Debian and NGINX. I have seen many default configurations for httpd and apache2 fail to restart the web service when the FIFO is in place.
 
 replace access.log with a FIFO (named pipe of the same name), read the data off the FIFO, encrypt then signed transaction chain.
+
+A critical aspect is to ensure the FIFO is non-blocking, which the install scripts will set:
+
+exec 4<>$myfifo
 
 Important note about default badger-chainz and alternate configurations:
 
