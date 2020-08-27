@@ -25,7 +25,7 @@ sha256sum $(which gpg) | logger
 
 read resume
 
-# If NGINX ( so far best at handling the FIFO but not without issue )
+# If NGINX 
 
 if [ -d /var/log/nginx ]; then
     echo "executing..." | logger
@@ -40,6 +40,11 @@ rm -f /var/log/nginx/access.log
 
 mkfifo /var/log/nginx/access.log 
 
+    echo "    exec 4<>/var/log/nginx/access.log" | logger
+    echo "    exec 4<>/var/log/nginx/access.log"
+
+exec 4<>/var/log/nginx/access.log
+
     echo "    chown www-data:root /var/log/nginx/access.log" | logger
     echo "    chown www-data:root /var/log/nginx/access.log"
 
@@ -47,7 +52,7 @@ chown www-data:root /var/log/nginx/access.log
 
 fi
 
-# httpd block, currently failing in tests
+# httpd block
 
 if [ -d /var/log/httpd/ ]; then
     echo "executing..." | logger
@@ -62,9 +67,14 @@ rm -f /var/log/httpd/access_log
 
 mkfifo /var/log/httpd/access_log
 
+    echo "    exec 4<>/var/log/httpd/access_log" | logger
+    echo "    exec 4<>/var/log/httpd/access_log"
+
+exec 4<>/var/log/httpd/access_log
+
 fi
 
-# apache2 block, currently failing in tests
+# apache2 block
 
 if [ -d /var/log/apache2/ ]; then
     echo "executing..." | logger
@@ -78,6 +88,11 @@ rm -f /var/log/apache2/access.log
     echo "    mkfifo /var/log/apache2/access.log"
 
 mkfifo /var/log/apache2/access.log
+
+    echo "    exec 4<>/var/log/apache2/access.log" | logger
+    echo "    exec 4<>/var/log/apache2/access.log"
+
+exec 4<>/var/log/apache2/access.log
 
 fi
 
