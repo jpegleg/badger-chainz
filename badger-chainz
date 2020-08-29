@@ -5,7 +5,7 @@ flock 100 || exit 1
 
 previousblock () {
   # hash the previous block
-  export seed="$(tail -n2 blch.chain | sha256sum | cut -d' ' -f1)"
+  export seed="$(tail -n1 blch.chain | sha256sum | cut -d' ' -f1)"
 }
 
 derive () {
@@ -23,9 +23,7 @@ transaction () {
 main () {
   transaction || logger "badger-chainz error return code $? - exit on transaction function..."
   act=TEMPLATEINSTANCENAME
-  echo "$stamp $seed" >> blch.chain 
-  echo "$(date +%Y%m%d%H%M%S%N), $act, $(cat peerpub.pem | xxd -p | tr -d '\n'), $seed, $(sha512sum secret.bin | cut -d' ' -f1), $(md5sum chain.key | cut -d' ' -f1), $(md5sum secret-rsa.pem | cut -d' ' -f1)" | tr -d '\n' >> blch.chain
-  echo >> blch.chain
+  echo "$stamp $seed $(echo -n $(date +%Y%m%d%H%M%S%N), $act, $(cat peerpub.pem | xxd -p), $seed, $(md5sum secret.bin | cut -d' ' -f1), $(md5sum chain.key | cut -d' ' -f1), $(md5sum secret-rsa.pem | cut -d' ' -f1) | xxd -p | tr -d '\n' )" >> blch.chain
   sha1sum blch.chain | cut -d' ' -f1 > blch.chain.sha1
   openssl rsautl -sign -in blch.chain.sha1 -inkey secret-rsa.pem -out blch.sign
   cat blch.sign | base64 | tr -d '\n' >> blch.history
