@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 
+linesx () {
+  printf '%*s' "${COLUMNS:-$(tput cols)}" '' | tr ' ' 🦡 
+}
+
+
     echo
     echo -e "\e[1;32m B A D G E R - C H A I N Z \e[39m installer\e[0m"
     echo
-
+    linesx
     echo "Installation $(date)" 
     echo "$(hostname)"
-    echo "$(sha256sum badger-chainz)" | logger
-    echo "$(sha256sum badger-chainz)"
-    echo "$(sha256sum chainz.cfg)" | logger
-    echo "$(sha256sum chainz.cfg)"
+    echo "starting $(sha256sum badger-chainz)" | logger
+    echo "starting $(sha256sum badger-chainz)"
+    echo "starting $(sha256sum chainz.cfg)" | logger
+    echo "starting $(sha256sum chainz.cfg)"
     echo
 
 # Requirements that this installer will not install by design
@@ -33,6 +38,64 @@ read resume
 chmod +x badger-chainz
 cp badger-chainz /usr/local/sbin/
 
+    echo
+    echo -e "\e[1;33mTime to setup the client public key. Paste in a single line of serialized hex encoded secp384r1 public key."
+    echo -e "\e[1;33mThe Client side of the badger-chainz generates a secp384r1 key pair: openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem; openssl ec -in secp384r1.pem -pubout -out peerpub.pem"
+    echo -e "\e[1;33mThe peerpub.pem is then provided to you right now, or before now, or if you are the Client, you can generate this content on your Client side machine/devices."
+    echo -e "\e[1;33mThen before you paste in this Client public key, make it a single line of hex, like so:"
+    echo -e "\e[1;32mcat peerpub.pem | xxd -p | tr -d '\\\n'"
+    echo -e "\e[1;33mCopy the result of that on to your clipboard buffer and paste it in to the installer then press return."
+    echo
+    
+read HEXPUB
+
+    echo
+    echo -e "\e[1;39m    validating that the provided secp384r1 public key is a valid key..."
+    echo
+    
+echo $HEXPUB | xxd -r -p > client-setup-pub.pem
+openssl ecparam -name secp384r1 -genkey -noout -out validation.pem
+openssl pkeyutl -derive -inkey validation.pem -peerkey client-setup-pub.pem -out secret.bin || exit 1
+sed -i "s/HEXCUSTPUBKEY/$HEXPUB/g" chainz.cfg || exit 1
+rm -f validation.pem secret.bin
+
+    echo
+    echo -e "\e[1;39mDo you want to deploy secret mode? Enter Y or N then press enter to continue."
+    echo
+    read secretmode
+    echo
+
+if [ $secretmode = Y ]; then
+    
+    echo
+    echo -e "\e[1;32mIf you are going to deploy secret mode (encrypt additionally with GPG/PGP key), then be sure to import that public key into $(whoami) keyring. Example:"
+    echo
+    echo -e "\e[1;33m  gpg --import /tmp/public_gpg_from_remote_admin.asc"
+    echo
+    echo -e"\e[1;32mAnd then paste in the key id or key email here and press the enter key. If you are not going to use secret mode, then simply press enter."
+    echo
+    
+read pgpml
+    
+    echo
+    
+sed -i "s/PGPEMAIL/$pgpml/g" badger-chainz-secret-mode
+
+    echo
+    echo -e "\e[1;32mOverwriting with secret mode:     cp badger-chainz-secret-mode /usr/local/sbin/badger-chainz"
+    echo
+    
+cp badger-chainz-secret-mode /usr/local/sbin/badger-chainz
+    
+  else    
+  
+    echo
+    echo -e "\e[1;31Not using secret mode."
+    echo
+    echo
+fi
+
+
 # If NGINX 
 
 if [ -d /var/log/nginx ]; then
@@ -53,10 +116,7 @@ mkfifo /var/log/nginx/access.log
 
 exec 4<>/var/log/nginx/access.log
 
-    echo "    chown www-data:root /var/log/nginx/access.log" | logger
-    echo "    chown www-data:root /var/log/nginx/access.log"
-
-chown www-data:root /var/log/nginx/access.log
+     linesx
 
 fi
 
@@ -80,6 +140,8 @@ mkfifo /var/log/httpd/access_log
 
 exec 4<>/var/log/httpd/access_log
 
+    linesx
+
 fi
 
 # apache2 block
@@ -102,7 +164,14 @@ mkfifo /var/log/apache2/access.log
 
 exec 4<>/var/log/apache2/access.log
 
+    linesx
+    
 fi
+
+    echo "deployment $(sha256sum badger-chainz)" | logger
+    echo "deployment $(sha256sum badger-chainz)"
+    echo "deployment $(sha256sum chainz.cfg)" | logger
+    echo "deployment $(sha256sum chainz.cfg)"
 
 mkdir -p /opt/badger-chainz/workspace/
 
@@ -119,32 +188,45 @@ cp chainz.cfg /opt/badger-chainz/etc/ || exit 1
     echo
     echo -e "\e[1;36m    entering /opt/badger-chainz/workspace/" | logger
     echo -e "\e[1;36m    entering /opt/badger-chainz/workspace/"
+    echo
 
 cd /opt/badger-chainz/
 
     echo
     echo -e "\e[1;36m    generating RSA signing private key: secret-rsa.pem" | logger
-
+    linesx
+    
 openssl genrsa 4096 > secret-rsa.pem
     
     echo
     echo -e "\e[1;36m    generating secp384r1 curve private key: secp384r1.pem"
+    linesx
 
 openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
 
     echo
     echo -e "\e[1;36m    extracting secp384r1 public key : secp384r1.pub"
+    linesx
 
 openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 
     echo
     echo -e "\e[1;36m    setting secp384r1.pem as the chain.key: cp secp384r1.pem chain.key"
+    linesx
 
 cp secp384r1.pem chain.key
+
+    echo
+    echo -e "\e[1;36m    setting secret-rsa.pem as the rsa.pem: cp secret-rsa.pem rsa.pem"
+    linesx
+
+cp secret-rsa.pem rsa.pem
+
 
 # more to come here...
 
 #
+    
     echo
     echo -e "\e[1;32m Install complete!\e[0m"
     echo
