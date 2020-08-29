@@ -13,7 +13,7 @@ export builddr=$(pwd)
     echo -e "\e[1;32m B A D G E R - C H A I N Z \e[39m interactive installer\e[0m"
     echo
     linesx
-    echo "Installation $(date)" 
+    echo "Installation $(date)"
     echo "$(hostname)"
     echo "starting $(sha256sum badger-chainz-secret-mode)" | logger
     echo "starting $(sha256sum badger-chainz-secret-mode)"
@@ -31,21 +31,21 @@ export builddr=$(pwd)
 sha256sum $(which sec) || exit 1
 sha256sum $(which sec) | logger
 sha256sum $(which openssl) || exit 1
-sha256sum $(which openssl) | logger 
+sha256sum $(which openssl) | logger
 sha256sum $(which gpg) || exit 1
 sha256sum $(which gpg) | logger
 
     echo
     echo "Type 'logonly' to install badger chains in encrypted-logs-only mode without a transaction block chain, otherwise hit enter to continue or control+c to abort install script."
 
-read weblogmode 
+read weblogmode
 
 if [ "$weblogmode" = "logonly" ]; then
 
     echo "badger-weblog installing..." | logger
-    echo "badger-weblog installing..." 
+    echo "badger-weblog installing..."
     echo "    chmod +x badger-weblog" | logger
-    echo "$(date +%Y%m%d:%H:%M:%S)     chmod +x badger-weblog" 
+    echo "$(date +%Y%m%d:%H:%M:%S)     chmod +x badger-weblog"
 
   chmod +x badger-weblog || exit 1
 
@@ -56,13 +56,13 @@ if [ "$weblogmode" = "logonly" ]; then
 
     echo "    mkdir -p /opt/badger-chainz/workspace/" | logger
     echo "$(date +%Y%m%d:%H:%M:%S)     mkdir -p /opt/badger-chainz/workspace/"
-    
+
   mkdir -p /opt/badger-chainz/workspace/
 
     echo "    mkdir -p /opt/badger-chainz/etc/" | logger
     echo "$(date +%Y%m%d:%H:%M:%S)     mkdir -p /opt/badger-chainz/etc/"
 
-  mkdir -p /opt/badger-chainz/etc/ 
+  mkdir -p /opt/badger-chainz/etc/
 
     echo "    cp weblog.cfg /opt/badger-chainz/etc/" | logger
     echo "$(date +%Y%m%d:%H:%M:%S)     cp weblog.cfg /opt/badger-chainz/etc/"
@@ -72,12 +72,12 @@ if [ "$weblogmode" = "logonly" ]; then
     echo
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)    entering /opt/badger-chainz/workspace/" | logger
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)     entering /opt/badger-chainz/workspace/"
-    
+
 else
 
   chmod +x badger-chainz
   cp badger-chainz /usr/local/sbin/
-  
+
     echo
     echo -e "\e[1;33mTime to setup the client public key. Paste in a single line of serialized hex encoded secp384r1 public key."
     echo -e "\e[1;33mThe Client side of the badger-chainz generates a secp384r1 key pair: openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem; openssl ec -in secp384r1.pem -pubout -out peerpub.pem"
@@ -86,19 +86,19 @@ else
     echo -e "\e[1;32mcat peerpub.pem | xxd -p | tr -d '\\\n'"
     echo -e "\e[1;33mCopy the result of that on to your clipboard buffer and paste it in to the installer then press return."
     echo -e "\e[0m"
-    
-    read HEXPUB 
-    
+
+    read HEXPUB
+
     echo
     echo -e "\e[1;39m$(date +%Y%m%d:%H:%M:%S)     validating that the provided secp384r1 public key is a valid key..."
-    echo    
-    
- 
-  
+    echo
+
+
   echo $HEXPUB | xxd -r -p > client-setup-pub.pem
   openssl ecparam -name secp384r1 -genkey -noout -out validation.pem
   openssl pkeyutl -derive -inkey validation.pem -peerkey client-setup-pub.pem -out secret.bin || exit 1
-  sed -i "s/HEXCUSTPUBKEY/$HEXPUB/g" chainz.cfg || exit 1
+  cp chainz.cfg chainz.cfg.edit
+  sed -i "s/HEXCUSTPUBKEY/$HEXPUB/g" chainz.cfg.edit || exit 1
   rm -f validation.pem secret.bin
 
     echo
@@ -108,7 +108,7 @@ else
     echo
 
 if [ $secretmode = Y ]; then
-    
+
     echo
     echo -e "\e[1;32mIf you are going to deploy secret mode (encrypt additionally with GPG/PGP key), then be sure to import that public key into $(whoami) keyring. Example:"
     echo
@@ -116,21 +116,22 @@ if [ $secretmode = Y ]; then
     echo
     echo -e "\e[1;32mAnd then paste in the key id or key email here and press the enter key. If you are not going to use secret mode, then simply press enter."
     echo -e "\e[0m"
-    
-  read pgpml 
-  
-    echo
-    
-  sed -i "s/PGPEMAIL/$pgpml/g" badger-chainz-secret-mode
+
+  read pgpml
 
     echo
-    echo -e "\e[1;32m$(date +%Y%m%d:%H:%M:%S)     Overwriting with secret mode:     cp badger-chainz-secret-mode /usr/local/sbin/badger-chainz"
+
+  cp badger-chainz-secret-mode badger-chainz-secret-mode.edit
+  sed -i "s/PGPEMAIL/$pgpml/g" badger-chainz-secret-mode.edit
+
+    echo
+    echo -e "\e[1;32m$(date +%Y%m%d:%H:%M:%S)     Overwriting with secret mode:     cp badger-chainz-secret-mode.edit /usr/local/sbin/badger-chainz"
     echo
 
-  chmod +x badger-chainz-secret-mode    
-  cp badger-chainz-secret-mode /usr/local/sbin/badger-chainz
-    
-else    
+  chmod +x badger-chainz-secret-mode.edit
+  cp badger-chainz-secret-mode.edit /usr/local/sbin/badger-chainz
+
+else
 
   secretmode=N
 
@@ -138,7 +139,7 @@ else
     echo -e "\e[1;31$(date +%Y%m%d:%H:%M:%S)     Not using secret mode."
     echo
     echo
-    
+
 fi
 
   mkdir -p /opt/badger-chainz/workspace/
@@ -146,37 +147,37 @@ fi
     echo "$(date +%Y%m%d:%H:%M:%S)     mkdir -p /opt/badger-chainz/etc/" | logger
     echo "$(date +%Y%m%d:%H:%M:%S)     mkdir -p /opt/badger-chainz/etc/"
 
-  mkdir -p /opt/badger-chainz/etc/ 
+  mkdir -p /opt/badger-chainz/etc/
 
-    echo "$(date +%Y%m%d:%H:%M:%S)     cp chainz.cfg /opt/badger-chainz/etc/" | logger
-    echo "$(date +%Y%m%d:%H:%M:%S)     cp chainz.cfg /opt/badger-chainz/etc/"
+    echo "$(date +%Y%m%d:%H:%M:%S)     cp chainz.cfg.edit /opt/badger-chainz/etc/" | logger
+    echo "$(date +%Y%m%d:%H:%M:%S)     cp chainz.cfg.edit /opt/badger-chainz/etc/"
 
-  cp chainz.cfg /opt/badger-chainz/etc/ || exit 1
+  cp chainz.cfg.edit /opt/badger-chainz/etc/ || exit 1
 
     echo
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)     entering /opt/badger-chainz/workspace/" | logger
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)    entering /opt/badger-chainz/workspace/"
     echo
 
-  cd /opt/badger-chainz/
+  cd /opt/badger-chainz/workspace
 
     echo
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)     generating RSA signing private key: secret-rsa.pem"
     linesx
-    
-  openssl genrsa 4096 > secret-rsa.pem 
-  
+
+  openssl genrsa 4096 > secret-rsa.pem
+
     echo
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)     generating secp384r1 curve private key: secp384r1.pem"
     linesx
 
-  openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem 
+  openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
 
     echo
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)     extracting secp384r1 public key : secp384r1.pub"
     linesx
 
-  openssl ec -in secp384r1.pem -pubout -out secp384r1.pub 
+  openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 
     echo
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)     setting secp384r1.pem as the chain.key: cp secp384r1.pem chain.key"
@@ -193,21 +194,21 @@ fi
 
 fi
 
-# If NGINX 
+# If NGINX
 
 if [ -d /var/log/nginx ]; then
 
     echo "executing..." | logger
     echo "executing..."
     echo "$(date +%Y%m%d:%H:%M:%S)     rm -f /var/log/nginx/access.log" | logger
-    echo "$(date +%Y%m%d:%H:%M:%S)     rm -f /var/log/nginx/access.log" 
+    echo "$(date +%Y%m%d:%H:%M:%S)     rm -f /var/log/nginx/access.log"
 
 rm -f /var/log/nginx/access.log
 
     echo "$(date +%Y%m%d:%H:%M:%S)     mkfifo /var/log/nginx/access.log" | logger
     echo "$(date +%Y%m%d:%H:%M:%S)     mkfifo /var/log/nginx/access.log"
 
-mkfifo /var/log/nginx/access.log 
+mkfifo /var/log/nginx/access.log
 
     echo "$(date +%Y%m%d:%H:%M:%S)     exec 4<>/var/log/nginx/access.log" | logger
     echo "$(date +%Y%m%d:%H:%M:%S)     exec 4<>/var/log/nginx/access.log"
@@ -215,7 +216,7 @@ mkfifo /var/log/nginx/access.log
 exec 4<>/var/log/nginx/access.log
 
     echo "$(date +%Y%m%d:%H:%M:%S)     restarting nginx"
-    
+
 systemctl restart nginx || /etc/init.d/nginx restart || echo "could not restart nginx"
 
      linesx
@@ -225,12 +226,12 @@ fi
 # httpd block
 
 if [ -d /var/log/httpd/ ]; then
-   
+
     echo "executing..." | logger
     echo "executing..."
     echo "$(date +%Y%m%d:%H:%M:%S)     rm -f /var/log/httpd/access_log" | logger
     echo "$(date +%Y%m%d:%H:%M:%S)     rm -f /var/log/httpd/access_log"
-    
+
 rm -f /var/log/httpd/access_log
 
     echo "$(date +%Y%m%d:%H:%M:%S)     mkfifo /var/log/httpd/access_log" | logger
@@ -244,7 +245,7 @@ mkfifo /var/log/httpd/access_log
 exec 4<>/var/log/httpd/access_log
 
     echo "$(date +%Y%m%d:%H:%M:%S)     restarting httpd"
-    
+
 systemctl restart httpd || /etc/init.d/httpd restart || echo "could not restart httpd"
 
     linesx
@@ -273,17 +274,17 @@ mkfifo /var/log/apache2/access.log
 exec 4<>/var/log/apache2/access.log
 
     echo "$(date +%Y%m%d:%H:%M:%S)     restarting apache2"
-    
+
 systemctl restart apache2 || /etc/init.d/apache2 restart || echo "could not restart apache2"
 
     linesx
-    
+
 fi
-    
+
     echo
     echo
     echo -e "\e[0m$(date +%Y%m%d:%H:%M:%S)     Returning to build dir $builddr"
-    
+
 cd $builddr
 
 if [ "$weblogmode" = "logonly" ]; then
@@ -317,3 +318,4 @@ fi
     echo
     echo -e "\e[1;32m$(date +%Y%m%d:%H:%M:%S)   Install complete!\e[0m"
     echo
+
