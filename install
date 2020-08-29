@@ -230,7 +230,7 @@ cp secret-rsa.pem rsa.pem
     for color in 196 208 226 118 21 54 128 ; do
       printf "\e[48;5;%sm%*s" $color "${COLUMNS:-$(tput cols)}" '' | tr ' ' \\\*
     done
-    echo
+    echo -e "\e[0m"
     echo
     echo -e "\e[1;32m Install complete!\e[0m"
     echo
