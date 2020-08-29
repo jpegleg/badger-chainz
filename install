@@ -72,7 +72,7 @@ if [ $secretmode = Y ]; then
     echo
     echo -e "\e[1;33m  gpg --import /tmp/public_gpg_from_remote_admin.asc"
     echo
-    echo -e"\e[1;32mAnd then paste in the key id or key email here and press the enter key. If you are not going to use secret mode, then simply press enter."
+    echo -e "\e[1;32mAnd then paste in the key id or key email here and press the enter key. If you are not going to use secret mode, then simply press enter."
     echo
     
 read pgpml
