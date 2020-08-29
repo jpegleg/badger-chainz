@@ -2,7 +2,12 @@
 
 
 linesx () {
-  printf '%*s' "${COLUMNS:-$(tput cols)}" '' | tr ' ' 🦡 
+  val=$(tput cols)
+  x=1
+  while [ $x -le $val ]; do
+    echo -n 🦡
+    x=$((x+1));
+  done
 }
 
 reset
@@ -28,6 +33,10 @@ export builddr=$(pwd)
     echo
 
 # Requirements that this installer will not install by design
+    echo "checking for dependencies gpg, sec, and openssl..."
+    echo "if the script gets stuck here, hit control+c and install gpg, sec, and openssl first."
+    echo
+    
 sha256sum $(which sec) || exit 1
 sha256sum $(which sec) | logger
 sha256sum $(which openssl) || exit 1
