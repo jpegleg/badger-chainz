@@ -5,8 +5,10 @@ linesx () {
 }
 
 reset
+
 export builddr=$(pwd)
 export instance=$1
+
 
     echo
     echo -e "\e[1;32m B A D G E R - C H A I N Z \e[39m installer\e[0m"
@@ -64,7 +66,7 @@ if [ $weblogmode = logonly ]; then
   mkdir -p /opt/badger-chainz/etc/ 
 
     echo "    cp weblog.cfg /opt/badger-chainz/etc/" | logger
-    echo "$$(date +%Y%m%d:%H:%M:%S)     cp weblog.cfg /opt/badger-chainz/etc/"
+    echo "$(date +%Y%m%d:%H:%M:%S)     cp weblog.cfg /opt/badger-chainz/etc/"
 
   cp badger-weblog.cfg /opt/badger-chainz/etc/ || exit 1
 
@@ -129,9 +131,9 @@ if [ $secretmode = Y ]; then
   cp badger-chainz-secret-mode /usr/local/sbin/badger-chainz
     
 else    
-  
+
   secretmode=N
- 
+
     echo
     echo -e "\e[1;31$(date +%Y%m%d:%H:%M:%S)     Not using secret mode."
     echo
@@ -296,7 +298,9 @@ if [ $weblogmode = "logonly" ]; then
     echo "deployment $(sha256sum badger-chainz)"
     echo "deployment $(sha256sum chainz.cfg)" | logger
     echo "deployment $(sha256sum chainz.cfg)"
+
 fi
+
 
 # more to come here...
 
