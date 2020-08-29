@@ -45,7 +45,7 @@ cp badger-chainz /usr/local/sbin/
     echo -e "\e[1;33mThen before you paste in this Client public key, make it a single line of hex, like so:"
     echo -e "\e[1;32mcat peerpub.pem | xxd -p | tr -d '\\\n'"
     echo -e "\e[1;33mCopy the result of that on to your clipboard buffer and paste it in to the installer then press return."
-    echo
+    echo -e "\e[0m"
     
 read HEXPUB
 
