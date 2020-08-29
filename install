@@ -228,7 +228,7 @@ cp secret-rsa.pem rsa.pem
 #
     echo
     for color in 196 208 226 118 21 54 128 ; do
-      printf "\e[48;5;%sm%*s" $color "${COLUMNS:-$(tput cols)}" '' | tr ' ' \\\*
+      printf "\e[48;5;%sm%*s" $color "${COLUMNS:-$(tput cols)}" '' | tr ' ' ' '
     done
     echo -e "\e[0m"
     echo
