@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 linesx () {
   printf '%*s' "${COLUMNS:-$(tput cols)}" '' | tr ' ' 🦡 
 }
@@ -7,11 +8,9 @@ linesx () {
 reset
 
 export builddr=$(pwd)
-export instance=$1
-
 
     echo
-    echo -e "\e[1;32m B A D G E R - C H A I N Z \e[39m installer\e[0m"
+    echo -e "\e[1;32m B A D G E R - C H A I N Z \e[39m interactive installer\e[0m"
     echo
     linesx
     echo "Installation $(date)" 
@@ -41,7 +40,7 @@ sha256sum $(which gpg) | logger
 
 read weblogmode 
 
-if [ $weblogmode = logonly ]; then
+if [ "$weblogmode" = "logonly" ]; then
 
     echo "badger-weblog installing..." | logger
     echo "badger-weblog installing..." 
@@ -76,10 +75,9 @@ if [ $weblogmode = logonly ]; then
     
 else
 
-  weblogmode=no
   chmod +x badger-chainz
   cp badger-chainz /usr/local/sbin/
-
+  
     echo
     echo -e "\e[1;33mTime to setup the client public key. Paste in a single line of serialized hex encoded secp384r1 public key."
     echo -e "\e[1;33mThe Client side of the badger-chainz generates a secp384r1 key pair: openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem; openssl ec -in secp384r1.pem -pubout -out peerpub.pem"
@@ -89,12 +87,14 @@ else
     echo -e "\e[1;33mCopy the result of that on to your clipboard buffer and paste it in to the installer then press return."
     echo -e "\e[0m"
     
-  read HEXPUB 
-
+    read HEXPUB 
+    
     echo
     echo -e "\e[1;39m$(date +%Y%m%d:%H:%M:%S)     validating that the provided secp384r1 public key is a valid key..."
-    echo
+    echo    
     
+ 
+  
   echo $HEXPUB | xxd -r -p > client-setup-pub.pem
   openssl ecparam -name secp384r1 -genkey -noout -out validation.pem
   openssl pkeyutl -derive -inkey validation.pem -peerkey client-setup-pub.pem -out secret.bin || exit 1
@@ -196,6 +196,7 @@ fi
 # If NGINX 
 
 if [ -d /var/log/nginx ]; then
+
     echo "executing..." | logger
     echo "executing..."
     echo "$(date +%Y%m%d:%H:%M:%S)     rm -f /var/log/nginx/access.log" | logger
@@ -224,6 +225,7 @@ fi
 # httpd block
 
 if [ -d /var/log/httpd/ ]; then
+   
     echo "executing..." | logger
     echo "executing..."
     echo "$(date +%Y%m%d:%H:%M:%S)     rm -f /var/log/httpd/access_log" | logger
@@ -252,6 +254,7 @@ fi
 # apache2 block
 
 if [ -d /var/log/apache2/ ]; then
+
     echo "executing..." | logger
     echo "executing..."
     echo "$(date +%Y%m%d:%H:%M:%S)     rm -f /var/log/apache2/access.log" | logger
@@ -283,7 +286,8 @@ fi
     
 cd $builddr
 
-if [ $weblogmode = "logonly" ]; then
+if [ "$weblogmode" = "logonly" ]; then
+
     echo "deployment $(sha256sum badger-weblog)" | logger
     echo "deployment $(sha256sum badger-weblog)"
     echo "deployment $(sha256sum badger-weblog.cfg)" | logger
