@@ -47,6 +47,11 @@ openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
 openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 cp secp384r1.pem chain.key
 cp secret-rsa.pem rsa.pem
+rm /var/log/nginx/access.log
+mkfifo /var/log/nginx/access.log
+exec 4<>/var/log/nginx/access.log
+chown www-data:root /var/log/nginx/access.log
+systemctl restart nginx
 grep badger-enforce /etc/crontab || echo "*/1 * * * * root /usr/local/sbin/badger-enforce >/dev/null 2>&1" >> /etc/crontab
 
 
