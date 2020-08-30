@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if pgrep -x "sec" >/dev/null
+then
+        exit 0
+else
+        sec -input /var/log/httpd/access.log -input /var/log/nginx/access.log -input /var/log/apache2/access.log -input /var/log/access.log -conf /opt/badger-chainz/etc/chainz.cfg -detach
+fi
