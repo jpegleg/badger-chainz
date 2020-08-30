@@ -158,10 +158,10 @@ fi
 
   mkdir -p /opt/badger-chainz/etc/
 
-    echo "$(date +%Y%m%d:%H:%M:%S)     cp chainz.cfg.edit /opt/badger-chainz/etc/" | logger
-    echo "$(date +%Y%m%d:%H:%M:%S)     cp chainz.cfg.edit /opt/badger-chainz/etc/"
+    echo "$(date +%Y%m%d:%H:%M:%S)     cp chainz.cfg.edit /opt/badger-chainz/etc/chainz.cfg" | logger
+    echo "$(date +%Y%m%d:%H:%M:%S)     cp chainz.cfg.edit /opt/badger-chainz/etc/chainz.cfg"
 
-  cp chainz.cfg.edit /opt/badger-chainz/etc/ || exit 1
+  cp chainz.cfg.edit /opt/badger-chainz/etc/chainz.cfg || exit 1
 
     echo
     echo -e "\e[1;36m$(date +%Y%m%d:%H:%M:%S)     entering /opt/badger-chainz/workspace/" | logger
