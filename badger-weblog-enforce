@@ -6,3 +6,8 @@ then
 else
         sec -input /var/log/httpd/access.log -input /var/log/nginx/access.log -input /var/log/apache2/access.log -input /var/log/access.log -conf /opt/badger-chainz/etc/badger-weblog.cfg -detach
 fi
+
+exec 4<>/var/log/nginx/access.log 2>/dev/null
+exec 4<>/var/log/httpd/access_log 2>/dev/null
+exec 4<>/var/log/apache2/access.log 2>/dev/null
+exec 4<>/var/log/access.log 2>/dev/null
