@@ -48,3 +48,7 @@ openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 cp secp384r1.pem chain.key
 cp secret-rsa.pem rsa.pem
 grep badger-enforce /etc/crontab || echo "*/1 * * * * root /usr/local/sbin/badger-enforce >/dev/null 2>&1" >> /etc/crontab
+
+
+Contact carefuldata@protonmail.com if you would like help setting up badger-chainz or customized features developed for you. Enjoy!
+
