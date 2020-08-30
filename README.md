@@ -5,7 +5,7 @@ See https://simple-evcorr.github.io/
 
 replace access.log with a FIFO (named pipe of the same name), read the data off the FIFO, encrypt then signed transaction chain.
 
-A critical aspect is to ensure the FIFO is non-blocking, which the install scripts will set:
+A critical aspect is to ensure the FIFO is non-blocking, which the install and enforce scripts will set:
 
 exec 4<>$myfifo
 
