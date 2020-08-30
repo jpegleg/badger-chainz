@@ -334,4 +334,14 @@ fi
     echo
     echo -e "\e[1;32m$(date +%Y%m%d:%H:%M:%S)   Install complete!\e[0m"
     echo
+    echo
+    echo "Admin checklist:"
+    echo
+    echo -e "\e[1;32m→ \e[0mensure the web server configurations are using the fifo access.log, if not make more fifos or change the webserver to align"
+    echo -e "\e[1;32m→ \e[0mwebservices restart and upgrade correctly with the fifo in place"
+    echo -e "\e[1;32m→ \e[0mensure any keys being used are properly tracked/backed-up"
+    echo -e "\e[1;32m→ \e[0mvalidate the configuration is working by submitting web requests"
+    echo
+    echo "Enjoy! Contact carefuldata@protonmail.com for more information or assistance."
+    echo
 
