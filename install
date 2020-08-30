@@ -223,8 +223,12 @@ mkfifo /var/log/nginx/access.log
 
 exec 4<>/var/log/nginx/access.log
 
-    echo "$(date +%Y%m%d:%H:%M:%S)     restarting nginx"
+    echo "$(date +%Y%m%d:%H:%M:%S)     chown www-data:root /var/log/nginx/access.log" 
 
+chown www-data:root /var/log/nginx/access.log
+   
+    echo "$(date +%Y%m%d:%H:%M:%S)     restarting nginx"   
+    
 systemctl restart nginx || /etc/init.d/nginx restart || echo "could not restart nginx"
 
      linesx
