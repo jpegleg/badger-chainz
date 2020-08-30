@@ -29,3 +29,22 @@ The install script does not expect you to use badger-chainz blockchain AND badge
 
 chmod +x install
 ./install
+
+Or install your way (automated or otherwise) example:
+
+sed -i 's/TEMPLATEINSTANCENAME/myinstancename/g' badger-chainz
+sed -i 's/HEXCUSTPUBKEY/2d2d2d2d2d424547494e205055424c4943204b45592d2d2d2d2d0a4d485977454159484b6f5a497a6a3043415159464b3445454143494459674145336e467753542f485267576f4f7943443848353143304d47534a592b594b4a630a70616c5669754776466c65345036447672383473307056623065635630304e6c45714b496a77626d31624653464c74425453573442326e4a57767a724a6a6c430a517a4f754b6268747148767a566f7737653730554a4334546e376445576a68430a2d2d2d2d2d454e44205055424c4943204b45592d2d2d2d2d0a/g' chainz.cfg
+mkdir -p /opt/badger-chainz/workspace
+mkdir -p /opt/badger-chainz/etc/
+cp chainz.cfg /opt/badger-chainz/etc/
+chmod +x badger-chainz 
+cp badger-chainz /usr/local/sbin/
+chmod +x badger-enforce
+cp badger-enforce /usr/local/sbin
+cd /opt/badger-chainz/workspace
+openssl genrsa 4096 > secret-rsa.pem
+openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+cp secp384r1.pem chain.key
+cp secret-rsa.pem rsa.pem
+grep badger-enforce /etc/crontab || echo "*/1 * * * * root /usr/local/sbin/badger-enforce >/dev/null 2>&1" >> /etc/crontab
