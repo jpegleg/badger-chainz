@@ -300,15 +300,14 @@ fi
 cd $builddr
 
 if [ "$weblogmode" = "logonly" ]; then
-
-    echo "deployment $(sha256sum badger-weblog)" | logger
-    echo "deployment $(sha256sum badger-weblog)"
-    echo "deployment $(sha256sum badger-weblog.cfg)" | logger
-    echo "deployment $(sha256sum badger-weblog.cfg)"
-    chmod +x badger-enforce
-    cp badger-enforce /usr/local/sbin/
-    /usr/local/sbin/badger-enforce
-    grep badger-enforce /etc/crontab || echo "*/1 * * * * root /usr/local/sbin/badger-enforce >/dev/null 2>&1" >> /etc/crontab
+    echo "deployment $(sha256sum badger-chainz)" | logger
+    echo "deployment $(sha256sum badger-chainz)"
+    echo "deployment $(sha256sum chainz.cfg)" | logger
+    echo "deployment $(sha256sum chainz.cfg)"
+    chmod +x badger-weblog-enforce
+    cp badger-weblog-enforce /usr/local/sbin/
+    /usr/local/sbin/badger-weblog-enforce
+    grep badger-weblog-enforce /etc/crontab || echo "*/1 * * * * root /usr/local/sbin/badger-weblog-enforce >/dev/null 2>&1" >> /etc/crontab
   elif [ $secretmode = Y ]; then
     echo "deployment $(sha256sum badger-chainz-secret-mode)" | logger
     echo "deployment $(sha256sum badger-chainz-secret-mode)"
@@ -319,15 +318,14 @@ if [ "$weblogmode" = "logonly" ]; then
     /usr/local/sbin/badger-enforce
     grep badger-enforce /etc/crontab || echo "*/1 * * * * root /usr/local/sbin/badger-enforce >/dev/null 2>&1" >> /etc/crontab
   else
-    echo "deployment $(sha256sum badger-chainz)" | logger
-    echo "deployment $(sha256sum badger-chainz)"
-    echo "deployment $(sha256sum chainz.cfg)" | logger
-    echo "deployment $(sha256sum chainz.cfg)"
-    chmod +x badger-weblog-enforce
-    cp badger-weblog-enforce /usr/local/sbin/
-    /usr/local/sbin/badger-weblog-enforce
-    grep badger-weblog-enforce /etc/crontab || echo "*/1 * * * * root /usr/local/sbin/badger-weblog-enforce >/dev/null 2>&1" >> /etc/crontab
-
+    echo "deployment $(sha256sum badger-weblog)" | logger
+    echo "deployment $(sha256sum badger-weblog)"
+    echo "deployment $(sha256sum badger-weblog.cfg)" | logger
+    echo "deployment $(sha256sum badger-weblog.cfg)"
+    chmod +x badger-enforce
+    cp badger-enforce /usr/local/sbin/
+    /usr/local/sbin/badger-enforce
+    grep badger-enforce /etc/crontab || echo "*/1 * * * * root /usr/local/sbin/badger-enforce >/dev/null 2>&1" >> /etc/crontab
 fi
 
     echo
