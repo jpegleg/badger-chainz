@@ -35,7 +35,7 @@ export builddr=$(pwd)
     echo "checking for dependencies gpg, sec, and openssl..."
     echo "if the script gets stuck here, hit control+c and install gpg, sec, and openssl first."
     echo
-    
+
 sha256sum $(which sec) || exit 1
 sha256sum $(which sec) | logger
 sha256sum $(which openssl) || exit 1
@@ -47,6 +47,34 @@ sha256sum $(which gpg) | logger
     echo "Type 'logonly' to install badger chains in encrypted-logs-only mode without a transaction block chain, otherwise hit enter to continue or control+c to abort install script."
 
 read weblogmode
+
+    echo
+    echo "Type 'b3sum' to install badger chains in b3sum mode... otherwise press any key to continue."
+
+read b3mode
+
+if [ "$b3mode" = "b3sum" ]; then
+
+    echo "checking for b3sum..." | logger
+    which b3sum || break
+    echo "found a b3sum, running sed on badger-chainz"
+    echo "    replacing sha1sum sha256sum and sha512sum with b3sum in badger chainz application" | logger
+    echo "$(date +%Y%m%d:%H:%M:%S)     replacing md5sum sha1sum sha256sum and sha512sum with b3sum in badger chainz application"
+    sed -i 's/md5sum/b3sum/g' badger-chainz
+    sed -i 's/sha1sum/b3sum/g' badger-chainz
+    sed -i 's/sha256sum/b3sum/g' badger-chainz
+    sed -i 's/sha512sum/b3sum/g' badger-chainz
+    sed -i 's/md5sum/b3sum/g' badger-chainz-secret-mode
+    sed -i 's/sha1sum/b3sum/g' badger-chainz-secret-mode
+    sed -i 's/sha256sum/b3sum/g' badger-chainz-secret-mode
+    sed -i 's/sha512sum/b3sum/g' badger-chainz-secret-mode
+
+else
+
+    echo "Not using b3sum."
+    echo
+
+fi
 
 if [ "$weblogmode" = "logonly" ]; then
 
@@ -223,12 +251,12 @@ mkfifo /var/log/nginx/access.log
 
 exec 4<>/var/log/nginx/access.log
 
-    echo "$(date +%Y%m%d:%H:%M:%S)     chown www-data:root /var/log/nginx/access.log" 
+    echo "$(date +%Y%m%d:%H:%M:%S)     chown www-data:root /var/log/nginx/access.log"
 
 chown www-data:root /var/log/nginx/access.log
-   
-    echo "$(date +%Y%m%d:%H:%M:%S)     restarting nginx"   
-    
+
+    echo "$(date +%Y%m%d:%H:%M:%S)     restarting nginx"
+
 systemctl restart nginx || /etc/init.d/nginx restart || echo "could not restart nginx"
 
      linesx
